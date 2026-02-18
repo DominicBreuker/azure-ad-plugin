@@ -430,7 +430,7 @@ public class AzureSecurityRealm extends SecurityRealm {
             throws InvalidJwtException, IOException {
         recreateSession(request);
         String state = request.getParameter("state");
-        StateCache.CacheHolder cachedStateValue = StateCache.CACHE.getIfPresent(state);
+        StateCache.CacheHolder cachedStateValue = state != null ? StateCache.CACHE.asMap().remove(state) : null;
         if (cachedStateValue == null || cachedStateValue.nonce() == null) {
             // no nonce, probably some issue with an old session, force the user to re-auth
             return HttpResponses.redirectToContextRoot();
